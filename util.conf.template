@@ -1,0 +1,7 @@
+# Change these variables.
+new_ip_address=123.123.123.123
+update_active=false
+file_owner='root:microk8s'
+
+# IMPORTANT: Do not edit the following variables.
+template="csr.conf.template"
