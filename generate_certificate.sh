@@ -17,7 +17,7 @@ error(){
 	exit 1
 }
 
-# Automatically updating the template 
+# Automatically updating the template
 add_new_ip(){
 	ip_addr=${1}
 	template="csr.conf.template"
@@ -27,12 +27,10 @@ add_new_ip(){
 	if [ -f "${template}" ];
 	then
 		# Extract the last ip address name
-		last_ip_entry=$(egrep 'IP.[0-9]' ${template} | tail -n 1 | cut -d'=' -f1 | cut -d'.' -f2) 
-		
+		last_ip_entry=$(egrep 'IP.[0-9]' ${template} | tail -n 1 | cut -d'=' -f1 | cut -d'.' -f2)
 		# Now increase 'IP' name
 		next_ip_entry=$((${last_ip_entry}+1))
-		
-		# Unique update for configuration file	
+		# Unique update for configuration file
 		if [ -z "$(egrep ${ip_addr} ${cert_dir}/${template})" ];
 		then
 			# Append new ip address to CSR configuration template
@@ -43,14 +41,14 @@ add_new_ip(){
 }
 
 generate_new_crsfile(){
-	# This will create the new crs file 
+	# This will create the new crs file
 	# after the current template has been
 	# updated.
 	sudo microk8s stop
 	sudo microk8s start
 }
 
-# [PURPOSE]: Execute this step first to remove older files. 
+# [PURPOSE]: Execute this step first to remove older files.
 # Remove all of the previous session files
 flush_older_resources(){
 	resource=( 'new_apiserver.csr' 'new_apiserver.crt' 'new_apiserver.key' 'ca.crt' 'ca.key' 'csr.*' )
@@ -93,11 +91,11 @@ generate_files(){
 }
 
 copy_key_and_cert(){
-	# Create a backup directory for current key if not exists, and ensure 
+	# Create a backup directory for current key if not exists, and ensure
 	[ ! -d "${bkup_dir}" ] && \
 	sudo mkdir -v ${bkup_dir} && \
 	sudo chown -R ${file_owner} ${bkup_dir}
-	# Ensure that the backup 
+	# Ensure that the backup
 	if [ -d "${bkup_dir}" ];
 	then
 		# Copy current in the certificate path to backup directory
@@ -135,7 +133,7 @@ extract_value(){
 
 usages(){
 	printf "\033[36mUSAGES:\033[0m\n"
-	printf "\033[35m$0 \033[32m--action=update\033[0m\n"	
+	printf "\033[35m$0 \033[32m--action=update\033[0m\n"
 }
 
 commands(){
@@ -157,7 +155,7 @@ help_menu(){
 for argv in $@
 do
 	case $argv in
-		action:*|--action=*) 
+		action:*|--action=*)
 		# Exsure that the utilites configuration file exists before action execution
 		[ ! -f "./util.conf" ] && error "Missing or unable to locate './util.conf' configuration file"
 		_action=$(extract_value $argv);;
